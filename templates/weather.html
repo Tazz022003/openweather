@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,300;9..144,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'weather/style.css' %}" />
+</head>
+<body{% if not weather.error %} data-sky="{{ weather.icon }}"{% endif %}>
+  <main class="page">
+    <form class="search" method="get" role="search">
+      <input type="text" name="city" placeholder="Search a city" value="{{ city }}" aria-label="City name" required />
+      <button type="submit">Search</button>
+    </form>
+
+    {% if weather.error %}
+      <p class="error" role="alert">{{ weather.error }}</p>
+      <p class="hint">Check the spelling or try a nearby city.</p>
+    {% else %}
+      <section class="reading" aria-live="polite">
+        <h1 class="place">{{ weather.city }}, {{ weather.country }}</h1>
+        <div class="temp-row">
+          <p class="temp">{{ weather.temp|floatformat:0 }}<small>°C</small></p>
+          <img class="icon" src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" alt="{{ weather.description }}" />
+        </div>
+        <p class="description">{{ weather.description }}</p>
+      </section>
+    {% endif %}
+  </main>
+</body>
+</html>
